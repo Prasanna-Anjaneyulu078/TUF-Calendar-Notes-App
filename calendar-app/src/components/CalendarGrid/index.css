@@ -1,0 +1,210 @@
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px 0;
+  position: relative;
+  text-align: center;
+  flex: 1;
+  grid-template-rows: auto repeat(6, 1fr);
+  min-height: 0;
+}
+
+@media (min-width: 768px) {
+  .calendar-grid {
+    gap: 8px 0;
+  }
+}
+
+.day-header {
+  font-family: var(--font-headline);
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(113, 120, 124, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .day-header {
+    padding-bottom: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .day-header {
+    padding-bottom: 0.5rem;
+  }
+}
+
+.weekend-header {
+  color: var(--weekend-color);
+}
+
+.calendar-cell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+  min-height: 0;
+  padding: 6px 0;
+}
+
+@media (min-width: 768px) {
+  .calendar-cell-wrapper {
+    padding: 4px 0;
+  }
+}
+
+.range-bg {
+  position: absolute;
+  top: calc(50% - 16px);
+  bottom: calc(50% - 16px);
+  background-color: var(--theme-color-light);
+  z-index: 0;
+}
+
+@media (min-width: 768px) {
+  .range-bg {
+    top: calc(50% - 18px);
+    bottom: calc(50% - 18px);
+  }
+}
+
+.range-bg:not(.start):not(.end) {
+  left: -4px;
+  right: -4px;
+}
+
+@media (min-width: 768px) {
+  .range-bg:not(.start):not(.end) {
+    left: 0;
+    right: 0;
+  }
+}
+
+.range-bg.start {
+  left: 50%;
+  right: -4px;
+  border-top-left-radius: var(--radius-full);
+  border-bottom-left-radius: var(--radius-full);
+}
+
+.range-bg.end {
+  left: -4px;
+  right: 50%;
+  border-top-right-radius: var(--radius-full);
+  border-bottom-right-radius: var(--radius-full);
+}
+
+.range-bg.start.end {
+  left: calc(50% - 16px);
+  right: calc(50% - 16px);
+  border-radius: var(--radius-full);
+}
+
+@media (min-width: 768px) {
+  .range-bg.start { right: 0; }
+  .range-bg.end { left: 0; }
+  .range-bg.start.end {
+    left: calc(50% - 18px);
+    right: calc(50% - 18px);
+  }
+}
+
+.date-number {
+  position: relative;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .date-number {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.calendar-cell-wrapper:hover .date-number:not(.selected):not(.today),
+.calendar-cell-wrapper:active .date-number:not(.selected):not(.today) {
+  background-color: var(--surface-container);
+}
+
+.out-of-month {
+  color: rgba(113, 120, 124, 0.9);
+}
+
+.out-of-month-wrapper {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.in-month {
+  color: var(--on-surface-variant);
+  font-weight: 500;
+}
+
+.weekend {
+  color: var(--weekend-color);
+  font-weight: 700;
+}
+
+.date-number.selected {
+  background-color: var(--theme-color);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 12px var(--theme-color-hover);
+}
+
+.date-number.today {
+  box-shadow: 0 0 0 2px var(--theme-color);
+  background-color: var(--theme-color);
+  color: white;
+  font-weight: 700;
+  /* Glow effect */
+  box-shadow: 0 0 0 2px var(--surface-container-lowest), 0 0 0 4px var(--theme-color), 0 4px 6px rgba(16, 67, 86, 0.2);
+}
+
+/* Specific styling for the selected text when it's just between */
+.calendar-cell-wrapper.is-between .date-number {
+  color: var(--theme-color);
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.holiday-marker {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--holiday-color);
+  z-index: 15;
+}
+
+.holiday-marker.marker-on-selected {
+  bottom: 6px;
+  background-color: white;
+}
+
+@media (min-width: 768px) {
+  .holiday-marker {
+    bottom: 0px;
+  }
+  .holiday-marker.marker-on-selected {
+    bottom: 4px;
+  }
+}

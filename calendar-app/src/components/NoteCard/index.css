@@ -1,0 +1,63 @@
+.note-card {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(193, 199, 204, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: var(--surface-container-lowest);
+  flex-shrink: 0;
+}
+
+.note-card:hover {
+  background-color: var(--surface-container-low);
+}
+
+.note-card.active {
+  background-color: var(--theme-color-light);
+  border-color: transparent;
+  border-left: 4px solid var(--theme-color);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.note-card.highlighted:not(.active) {
+  border-color: var(--theme-color);
+  background-color: var(--theme-color-light);
+  opacity: 0.9;
+}
+
+.note-date {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--outline);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+.note-card.active .note-date {
+  color: rgba(16, 67, 86, 0.6); /* Fallback, ideally uses theme color */
+}
+
+.note-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 0.25rem;
+}
+
+.note-card.active .note-title {
+  color: var(--theme-color);
+}
+
+.note-desc {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  line-height: 1.625;
+}
+
+.note-card.active .note-desc {
+  color: var(--theme-color);
+  font-weight: 500;
+}
