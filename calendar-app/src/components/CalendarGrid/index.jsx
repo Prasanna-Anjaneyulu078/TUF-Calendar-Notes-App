@@ -28,7 +28,7 @@ const CalendarGrid = ({ currentDate, selectedRange, onDateClick, activeNoteRange
     else if (isWeekend && !isStart && !isEnd && !isBetween) cellClass += " weekend";
     else cellClass += " in-month";
     
-    let wrapperClass = `calendar-cell-wrapper ${isBetween ? 'is-between' : ''} ${isStart && rangeToUse.end ? 'is-start-range' : ''} ${isEnd && rangeToUse.start ? 'is-end-range' : ''}`;
+    let wrapperClass = `calendar-cell-wrapper ${isBetween ? 'is-between' : ''} ${isStart ? 'is-start-range' : ''} ${isEnd ? 'is-end-range' : ''}`;
     if (!cell.isCurrentMonth) wrapperClass += " out-of-month-wrapper";
     
     return (
@@ -38,7 +38,7 @@ const CalendarGrid = ({ currentDate, selectedRange, onDateClick, activeNoteRange
         onClick={() => cell.isCurrentMonth && onDateClick(cell.date)}
       >
         {/* Background highlight for range */}
-        {(isBetween || (isStart && rangeToUse.end) || (isEnd && rangeToUse.start)) && (
+        {(rangeToUse.start && rangeToUse.end && (isBetween || isStart || isEnd)) && (
           <div className={`range-bg ${isStart ? 'start' : ''} ${isEnd ? 'end' : ''}`}></div>
         )}
         

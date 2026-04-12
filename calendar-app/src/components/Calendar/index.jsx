@@ -14,6 +14,9 @@ const Calendar = ({
   const monthName = currentDate.toLocaleString('default', { month: 'long' });
   const year = currentDate.getFullYear();
 
+  const hasActiveNote = activeNoteRange !== null;
+  const hasSelection = selectedRange?.start !== null || selectedRange?.end !== null;
+
   return (
     <div className="calendar-container">
       <div className="calendar-header">
@@ -45,7 +48,9 @@ const Calendar = ({
       <div className="calendar-legend">
         <div className="legend-item">
           <div className="legend-dot dot-selected"></div>
-          <span className="legend-label">Selected Goal</span>
+          <span className="legend-label">
+            {hasActiveNote ? 'Active Note' : 'Selected Goal'}
+          </span>
         </div>
         <div className="legend-item">
           <div className="legend-dot dot-range"></div>

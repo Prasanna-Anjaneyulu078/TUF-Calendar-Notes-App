@@ -12,7 +12,7 @@ function App() {
   const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
   const [notes, setNotes] = useState(() => {
     try {
-      const savedNotes = localStorage.getItem('atelier_notes');
+      const savedNotes = localStorage.getItem('calendarNotes');
       if (!savedNotes) return [];
 
       const parsedNotes = JSON.parse(savedNotes);
@@ -43,7 +43,7 @@ function App() {
 
   // Save notes to local storage when changed
   useEffect(() => {
-    localStorage.setItem('atelier_notes', JSON.stringify(notes));
+    localStorage.setItem('calendarNotes', JSON.stringify(notes));
   }, [notes]);
 
   // Apply theme when month changes
@@ -80,7 +80,7 @@ function App() {
       if (!prev.start || (prev.start && prev.end)) {
         newRange = { start: date, end: null };
       }
-      // If clicking the same start date, clear it
+      // If clicking the same start date, clear selection
       else if (isSameDay(prev.start, date)) {
         newRange = { start: null, end: null };
       }
@@ -94,12 +94,13 @@ function App() {
         newRange = { ...prev, end: date };
       }
       
-      // Smart Add Note: Auto-open modal if both dates are selected
+      // Validate date range (no past dates)
       if (newRange.start && newRange.end) {
         if (newRange.start < today || newRange.end < today) {
           showToast("Date range cannot include past dates", "error");
           return { start: null, end: null };
         }
+        // Auto-open modal when both dates are selected
         setTimeout(() => setIsModalOpen(true), 50);
       }
       
@@ -108,10 +109,16 @@ function App() {
   };
 
   const handleAddNoteClick = () => {
+    // Use today as default if no dates selected
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const rangeToCheck = selectedRange.start ? selectedRange : { start: today, end: null };
+    
     // Check for duplicate before opening modal
     const duplicate = notes.find(n => 
-      isSameDay(n.start, selectedRange.start) && 
-      ((!n.end && !selectedRange.end) || (n.end && selectedRange.end && isSameDay(n.end, selectedRange.end)))
+      isSameDay(n.start, rangeToCheck.start) && 
+      ((!n.end && !rangeToCheck.end) || (n.end && rangeToCheck.end && isSameDay(n.end, rangeToCheck.end)))
     );
     
     if (duplicate) {
@@ -168,7 +175,8 @@ function App() {
       return [...prev, newNote].sort((a, b) => a.start - b.start);
     });
 
-    setSelectedRange({ start: null, end: null }); // Clear selection after saving
+    // Clear selection after saving
+    setSelectedRange({ start: null, end: null });
     setNoteToEdit(null);
   };
 
@@ -184,7 +192,10 @@ function App() {
   
   // Determine which range to show on calendar
   const activeNote = notes.find(n => n.id === activeNoteId);
-  const activeNoteRange = activeNote ? { start: activeNote.start, end: activeNote.end } : null;
+  const activeNoteRange = activeNote ? { 
+    start: activeNote.start, 
+    end: activeNote.end || activeNote.start 
+  } : null;
 
   return (
     <div className="app-container">

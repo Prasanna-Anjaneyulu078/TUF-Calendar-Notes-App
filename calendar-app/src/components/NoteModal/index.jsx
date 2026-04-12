@@ -9,6 +9,11 @@ const NoteModal = ({ isOpen, onClose, onSave, selectedRange, noteToEdit }) => {
 
   if (!isOpen) return null;
 
+  // Use today as default if no dates selected
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const effectiveRange = selectedRange.start ? selectedRange : { start: today, end: null };
+
   const handleSave = () => {
     if (!description.trim()) return;
     
@@ -16,16 +21,16 @@ const NoteModal = ({ isOpen, onClose, onSave, selectedRange, noteToEdit }) => {
       id: noteToEdit ? noteToEdit.id : Date.now().toString(),
       title: title.trim(),
       description: description.trim(),
-      start: selectedRange.start,
-      end: selectedRange.end
+      start: effectiveRange.start,
+      end: effectiveRange.end
     });
     onClose();
   };
 
-  const dateStr = selectedRange.start 
-    ? (selectedRange.end 
-        ? `${formatDateShort(selectedRange.start)} – ${formatDateShort(selectedRange.end)}`
-        : formatDateShort(selectedRange.start))
+  const dateStr = effectiveRange.start 
+    ? (effectiveRange.end 
+        ? `${formatDateShort(effectiveRange.start)} – ${formatDateShort(effectiveRange.end)}`
+        : formatDateShort(effectiveRange.start))
     : 'No date selected';
 
   return (
@@ -38,13 +43,14 @@ const NoteModal = ({ isOpen, onClose, onSave, selectedRange, noteToEdit }) => {
           </button>
         </div>
         
+        {isDuplicate && (
+          <div className="duplicate-alert">
+            <span className="material-symbols-outlined">info</span>
+            <p>Note already exists for selected dates. Updating existing note.</p>
+          </div>
+        )}
+        
         <div className="modal-body">
-          {isDuplicate && (
-            <div className="duplicate-alert">
-              <span className="material-symbols-outlined">info</span>
-              <p>Note already exists for selected dates. Updating existing note.</p>
-            </div>
-          )}
           <div className="modal-date-badge">
             <span className="material-symbols-outlined">calendar_today</span>
             {dateStr}
@@ -78,7 +84,7 @@ const NoteModal = ({ isOpen, onClose, onSave, selectedRange, noteToEdit }) => {
           <button 
             className="btn-save" 
             onClick={handleSave}
-            disabled={!description.trim() || !selectedRange.start}
+            disabled={!description.trim() || !effectiveRange.start}
           >
             Save Note
           </button>

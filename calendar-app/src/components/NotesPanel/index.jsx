@@ -16,14 +16,14 @@ const NotesPanel = ({
   const filteredNotes = useMemo(() => {
     if (activeFilter === 'all') return notes;
     
+    const monthStart = new Date(currentYear, currentMonth, 1);
+    const monthEnd = new Date(currentYear, currentMonth + 1, 0);
+
     return notes.filter(note => {
-      const startMonth = note.start.getMonth();
-      const startYear = note.start.getFullYear();
-      const endMonth = note.end ? note.end.getMonth() : startMonth;
-      const endYear = note.end ? note.end.getFullYear() : startYear;
-      
-      return (startMonth === currentMonth && startYear === currentYear) || 
-             (endMonth === currentMonth && endYear === currentYear);
+      const noteStart = note.start;
+      const noteEnd = note.end ? note.end : note.start;
+
+      return !(noteEnd < monthStart || noteStart > monthEnd);
     });
   }, [notes, activeFilter, currentMonth, currentYear]);
 
@@ -72,8 +72,11 @@ const NotesPanel = ({
             </div>
           ) : (
             filteredNotes.map(note => {
-              const isCurrentMonth = (note.start.getMonth() === currentMonth && note.start.getFullYear() === currentYear) || 
-                                    (note.end && note.end.getMonth() === currentMonth && note.end.getFullYear() === currentYear);
+              const noteStart = note.start;
+              const noteEnd = note.end ? note.end : note.start;
+              const monthStart = new Date(currentYear, currentMonth, 1);
+              const monthEnd = new Date(currentYear, currentMonth + 1, 0);
+              const isCurrentMonth = !(noteEnd < monthStart || noteStart > monthEnd);
               
               return (
                 <NoteCard 

@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
 :root {
   --theme-color: #104356;
@@ -237,10 +236,9 @@ input, textarea {
 
 @media (max-width: 768px) {
   .toast {
-    right: 50%;
-    transform: translateX(50%);
+    top: auto;
     bottom: 15px;
-    width: max-content;
+    transform: translateX(-40%);
     max-width: 90vw;
   }
 }
